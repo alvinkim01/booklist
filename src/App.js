@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './App.css';
 import firebase from './Firebase';
+import renderHTML from 'react-render-html';
+
 
 class App extends Component {
   constructor(props) {
@@ -57,7 +59,7 @@ class App extends Component {
                 {this.state.boards.map(board =>
                   <tr>
                     <td><Link to={`/show/${board.key}`}>{board.title}</Link></td>
-                    <td>{board.description}</td>
+                    <td>{renderHTML(board.description)}</td>
                     <td>{board.author}</td>
                   </tr>
                 )}

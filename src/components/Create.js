@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
 import firebase from '../Firebase';
 import { Link } from 'react-router-dom';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 class Create extends Component {
 
@@ -15,9 +17,15 @@ class Create extends Component {
     };
   }
   onChange = (e) => {
-    const state = this.state
+    const state = this.state;
     state[e.target.name] = e.target.value;
     this.setState(state);
+  }
+
+  // quill side
+  onBodyChange=(value) => {
+    const state = this.state;
+    this.setState({ description: value });
   }
 
   onSubmit = (e) => {
@@ -61,7 +69,15 @@ class Create extends Component {
               </div>
               <div class="form-group">
                 <label for="description">Description:</label>
-                <textArea class="form-control" name="description" onChange={this.onChange} placeholder="Description" cols="80" rows="3">{description}</textArea>
+                <ReactQuill
+                  modules={Create.modules}
+                  formats={Create.formats}
+                  name="description"
+                  value={this.state.description}
+                  onChange={this.onBodyChange}
+                  placeholder="Write something.."
+          />
+                {/* <textArea class="form-control" name="description" onChange={this.onChange} placeholder="Description" cols="80" rows="3">{description}</textArea> */}
               </div>
               <div class="form-group">
                 <label for="author">Author:</label>
@@ -75,5 +91,37 @@ class Create extends Component {
     );
   }
 }
+// Quill Config
+Create.modules = {
+  toolbar: [
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+    [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+    ['link', 'image', 'video'],
+    ['clean'],
+    ['code-block']
+  ],
+  clipboard: {
+    // toggle to add extra line breaks when pasting HTML:
+    matchVisual: false
+  }
+};
 
+Create.formats = [
+  'header',
+  'font',
+  'size',
+  'bold',
+  'italic',
+  'underline',
+  'strike',
+  'blockquote',
+  'list',
+  'bullet',
+  'indent',
+  'link',
+  'image',
+  'video',
+  'code-block'
+];
 export default Create;

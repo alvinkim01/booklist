@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import firebase from '../Firebase';
 import { Link } from 'react-router-dom';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 class Edit extends Component {
 
@@ -35,6 +37,11 @@ class Edit extends Component {
     const state = this.state
     state[e.target.name] = e.target.value;
     this.setState({board:state});
+  }
+  // quill side
+  onBodyChange=(value) => {
+    const state = this.state;
+    this.setState({ description: value });
   }
 
   onSubmit = (e) => {
@@ -79,7 +86,15 @@ class Edit extends Component {
               </div>
               <div class="form-group">
                 <label for="description">Description:</label>
-                <input type="text" class="form-control" name="description" value={this.state.description} onChange={this.onChange} placeholder="Description" />
+                <ReactQuill
+                  modules={Edit.modules}
+                  formats={Edit.formats}
+                  name="description"
+                  value={this.state.description}
+                  onChange={this.onBodyChange}
+                  placeholder="Write something.."
+          />
+                {/* <input type="text" class="form-control" name="description" value={this.state.description} onChange={this.onChange} placeholder="Description" /> */}
               </div>
               <div class="form-group">
                 <label for="author">Author:</label>
@@ -93,5 +108,39 @@ class Edit extends Component {
     );
   }
 }
+
+// Quill Config
+Edit.modules = {
+  toolbar: [
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+    [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+    ['link', 'image', 'video'],
+    ['clean'],
+    ['code-block']
+  ],
+  clipboard: {
+    // toggle to add extra line breaks when pasting HTML:
+    matchVisual: false
+  }
+};
+
+Edit.formats = [
+  'header',
+  'font',
+  'size',
+  'bold',
+  'italic',
+  'underline',
+  'strike',
+  'blockquote',
+  'list',
+  'bullet',
+  'indent',
+  'link',
+  'image',
+  'video',
+  'code-block'
+];
 
 export default Edit;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import firebase from '../Firebase';
 import { Link } from 'react-router-dom';
+import renderHTML from 'react-render-html';
 
 class Show extends Component {
 
