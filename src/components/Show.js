@@ -51,8 +51,8 @@ class Show extends Component {
             <dl>
               <dt>Description:</dt>
               <dd>{this.state.board.description}</dd>
-              <dt>Author:</dt>
-              <dd>{this.state.board.author}</dd>
+              <dt>DOC ID:</dt>
+              <dd>{this.state.board.docid}</dd>
             </dl>
             <Link to={`/edit/${this.state.key}`} class="btn btn-success">Edit</Link>&nbsp;
             <button onClick={this.delete.bind(this, this.state.key)} class="btn btn-danger">Delete</button>

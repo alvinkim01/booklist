@@ -13,7 +13,7 @@ class Create extends Component {
     this.state = {
       title: '',
       description: '',
-      author: ''
+      docid: ''
     };
   }
   onChange = (e) => {
@@ -31,17 +31,15 @@ class Create extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    const { title, description, author } = this.state;
+    const { title, description, docid } = this.state;
 
-    this.ref.add({
+    this.ref.doc(docid).set({
       title,
-      description,
-      author
+      description
     }).then((docRef) => {
       this.setState({
         title: '',
-        description: '',
-        author: ''
+        description: ''
       });
       this.props.history.push("/")
     })
@@ -51,7 +49,7 @@ class Create extends Component {
   }
 
   render() {
-    const { title, description, author } = this.state;
+    const { title, description, docid } = this.state;
     return (
       <div class="container">
         <div class="panel panel-default">
@@ -80,8 +78,8 @@ class Create extends Component {
                 {/* <textArea class="form-control" name="description" onChange={this.onChange} placeholder="Description" cols="80" rows="3">{description}</textArea> */}
               </div>
               <div class="form-group">
-                <label for="author">Author:</label>
-                <input type="text" class="form-control" name="author" value={author} onChange={this.onChange} placeholder="Author" />
+                <label for="docid">DOC ID:</label>
+                <input type="text" class="form-control" name="docid" value={docid} onChange={this.onChange} placeholder="docid" />
               </div>
               <button type="submit" class="btn btn-success">Submit</button>
             </form>
