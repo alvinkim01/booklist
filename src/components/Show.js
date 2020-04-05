@@ -49,8 +49,10 @@ class Show extends Component {
           </div>
           <div class="panel-body">
             <dl>
-              <dt>Description:</dt>
-              <dd>{this.state.board.description}</dd>
+              <dt>총운:</dt>
+              <dd>{this.state.board.totalfortune}</dd>
+              <dt>월수운:</dt>
+              <dd>{this.state.board.monthfortune}</dd>
               <dt>DOC ID:</dt>
               <dd>{this.state.board.docid}</dd>
             </dl>

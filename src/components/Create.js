@@ -12,7 +12,8 @@ class Create extends Component {
     this.ref = firebase.firestore().collection('boards');
     this.state = {
       title: '',
-      description: '',
+      totalfortune: '',
+      monthfortune:'',
       docid: ''
     };
   }
@@ -25,21 +26,30 @@ class Create extends Component {
   // quill side
   onBodyChange=(value) => {
     const state = this.state;
-    this.setState({ description: value });
+    this.setState({ totalfortune: value });
+  }
+
+  onMonthBodyChange=(value) => {
+    const state = this.state;
+    this.setState({ monthfortune: value });
   }
 
   onSubmit = (e) => {
     e.preventDefault();
 
-    const { title, description, docid } = this.state;
+    const { title, totalfortune,monthfortune, docid } = this.state;
 
     this.ref.doc(docid).set({
       title,
-      description
+      totalfortune,
+      monthfortune,
+      docid
     }).then((docRef) => {
       this.setState({
         title: '',
-        description: ''
+        totalfortune: '',
+        monthfortune,
+        docid
       });
       this.props.history.push("/")
     })
@@ -49,7 +59,7 @@ class Create extends Component {
   }
 
   render() {
-    const { title, description, docid } = this.state;
+    const { title, totalfortune,monthfortune, docid } = this.state;
     return (
       <div class="container">
         <div class="panel panel-default">
@@ -66,15 +76,27 @@ class Create extends Component {
                 <input type="text" class="form-control" name="title" value={title} onChange={this.onChange} placeholder="Title" />
               </div>
               <div class="form-group">
-                <label for="description">Description:</label>
+                <label for="totalfortune">총운:</label>
                 <ReactQuill
                   modules={Create.modules}
                   formats={Create.formats}
-                  name="description"
-                  value={this.state.description}
+                  name="totalfortune"
+                  value={this.state.totalfortune}
                   onChange={this.onBodyChange}
-                  placeholder="Write something.."
-          />
+                  placeholder="총운"
+                />
+                {/* <textArea class="form-control" name="description" onChange={this.onChange} placeholder="Description" cols="80" rows="3">{description}</textArea> */}
+              </div>
+              <div class="form-group">
+                <label for="monthfortune">월수운:</label>
+                <ReactQuill
+                  modules={Create.modules}
+                  formats={Create.formats}
+                  name="monthfortune"
+                  value={this.state.monthfortune}
+                  onChange={this.onMonthBodyChange}
+                  placeholder="월수운"
+                />
                 {/* <textArea class="form-control" name="description" onChange={this.onChange} placeholder="Description" cols="80" rows="3">{description}</textArea> */}
               </div>
               <div class="form-group">

@@ -11,8 +11,8 @@ class Edit extends Component {
     this.state = {
       key: '',
       title: '',
-      description: '',
-      docid: ''
+      totalfortune: '',
+      monthfortune:''
     };
   }
 
@@ -24,8 +24,8 @@ class Edit extends Component {
         this.setState({
           key: doc.id,
           title: board.title,
-          description: board.description,
-          docid: board.docid
+          totalfortune: board.totalfortune,
+          monthfortune:board.monthfortune
         });
       } else {
         console.log("No such document!");
@@ -41,25 +41,29 @@ class Edit extends Component {
   // quill side
   onBodyChange=(value) => {
     const state = this.state;
-    this.setState({ description: value });
+    this.setState({ totalfortune: value });
   }
 
+  onMonthBodyChange=(value) => {
+    const state = this.state;
+    this.setState({ monthfortune: value });
+  }
   onSubmit = (e) => {
     e.preventDefault();
 
-    const { title, description, docid } = this.state;
+    const { title, totalfortune, monthfortune } = this.state;
 
     const updateRef = firebase.firestore().collection('boards').doc(this.state.key);
     updateRef.set({
       title,
-      description,
-      docid
+      totalfortune,
+      monthfortune
     }).then((docRef) => {
       this.setState({
         key: '',
         title: '',
-        description: '',
-        docid: ''
+        totalfortune: '',
+        monthfortune: ''
       });
       this.props.history.push("/show/"+this.props.match.params.id)
     })
@@ -85,16 +89,27 @@ class Edit extends Component {
                 <input type="text" class="form-control" name="title" value={this.state.title} onChange={this.onChange} placeholder="Title" />
               </div>
               <div class="form-group">
-                <label for="description">Description:</label>
+                <label for="totalfortune">totalfortune:</label>
                 <ReactQuill
                   modules={Edit.modules}
                   formats={Edit.formats}
-                  name="description"
-                  value={this.state.description}
+                  name="totalfortune"
+                  value={this.state.totalfortune}
                   onChange={this.onBodyChange}
                   placeholder="Write something.."
-          />
-                {/* <input type="text" class="form-control" name="description" value={this.state.description} onChange={this.onChange} placeholder="Description" /> */}
+               />
+              </div>
+              <div class="form-group">
+                <label for="monthfortune">월수운:</label>
+                <ReactQuill
+                  modules={Edit.modules}
+                  formats={Edit.formats}
+                  name="monthfortune"
+                  value={this.state.monthfortune}
+                  onChange={this.onMonthBodyChange}
+                  placeholder="월수운"
+                />
+                {/* <input type="text" class="form-control" name="totalfortune" value={this.state.totalfortune} onChange={this.onChange} placeholder="totalfortune" /> */}
               </div>
               <div class="form-group">
                 <label for="docid">docid:</label>

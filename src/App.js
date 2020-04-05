@@ -18,12 +18,13 @@ class App extends Component {
   onCollectionUpdate = (querySnapshot) => {
     const boards = [];
     querySnapshot.forEach((doc) => {
-      const { title, description } = doc.data();
+      const { title, totalfortune,monthfortune } = doc.data();
       boards.push({
         key: doc.id,
         doc, // DocumentSnapshot
         title,
-        description
+        totalfortune,
+        monthfortune
       });
     });
     this.setState({
@@ -50,7 +51,8 @@ class App extends Component {
               <thead>
                 <tr>
                   <th>Title</th>
-                  <th>Description</th>
+                  {/* <th>totalfortune</th> */}
+                  {/* <th>monthfortune</th> */}
                   <th>DOCID</th>
                 </tr>
               </thead>
@@ -58,7 +60,8 @@ class App extends Component {
                 {this.state.boards.map(board =>
                   <tr>
                     <td><Link to={`/show/${board.key}`}>{board.title}</Link></td>
-                    <td>{renderHTML(board.description)}</td>
+                    {/* <td>{renderHTML(board.totalfortune)}</td> */}
+                    {/* <td>{renderHTML(board.monthfortune)}</td> */}
                     <td>{board.key}</td>
                   </tr>
                 )}
