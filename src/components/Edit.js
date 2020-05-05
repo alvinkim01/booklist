@@ -12,12 +12,14 @@ class Edit extends Component {
       key: '',
       title: '',
       totalfortune: '',
-      monthfortune:''
+      monthfortune:'',
+      lang:''
     };
   }
 
   componentDidMount() {
-    const ref = firebase.firestore().collection('boards').doc(this.props.match.params.id);
+    const firestore = firebase.firestore;
+    const ref = firestore.collection('boards').doc(this.props.match.params.id);
     ref.get().then((doc) => {
       if (doc.exists) {
         const board = doc.data();
@@ -25,7 +27,9 @@ class Edit extends Component {
           key: doc.id,
           title: board.title,
           totalfortune: board.totalfortune,
-          monthfortune:board.monthfortune
+          monthfortune:board.monthfortune,
+          docid:board.docid,
+          lang:board.lang
         });
       } else {
         console.log("No such document!");
@@ -51,19 +55,23 @@ class Edit extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    const { title, totalfortune, monthfortune } = this.state;
-
-    const updateRef = firebase.firestore().collection('boards').doc(this.state.key);
+    const { title, totalfortune, monthfortune,docid,lang } = this.state;
+    const firestore = firebase.firestore;
+    const updateRef = firestore.collection('boards').doc(this.state.key);
     updateRef.set({
       title,
       totalfortune,
-      monthfortune
+      monthfortune,
+      docid,
+      lang
     }).then((docRef) => {
       this.setState({
         key: '',
         title: '',
         totalfortune: '',
-        monthfortune: ''
+        monthfortune: '',
+        docid:'',
+        lang:''
       });
       this.props.history.push("/show/"+this.props.match.params.id)
     })
@@ -114,6 +122,10 @@ class Edit extends Component {
               <div class="form-group">
                 <label for="docid">docid:</label>
                 <input type="text" class="form-control" name="docid" value={this.state.docid} onChange={this.onChange} placeholder="docid" />
+              </div>
+              <div class="form-group">
+                <label for="lang">Language:</label>
+                <input type="text" class="form-control" name="lang" value={this.state.lang} onChange={this.onChange} placeholder="language" />
               </div>
               <button type="submit" class="btn btn-success">Submit</button>
             </form>

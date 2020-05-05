@@ -2,29 +2,36 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './App.css';
 import firebase from './Firebase';
-import renderHTML from 'react-render-html';
+import Login from './Login';
+// import renderHTML from 'react-render-html';
 
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.ref = firebase.firestore().collection('boards');
+    const firestore = firebase.firestore;
+    this.ref = firestore.collection('boards');
     this.unsubscribe = null;
     this.state = {
-      boards: []
+      boards: [],
+      login : true
+    };
+    if (firebase.auth.currentUser===null){
+      this.state.login = false;
     };
   }
 
   onCollectionUpdate = (querySnapshot) => {
     const boards = [];
     querySnapshot.forEach((doc) => {
-      const { title, totalfortune,monthfortune } = doc.data();
+      const { title, totalfortune,monthfortune,lang } = doc.data();
       boards.push({
         key: doc.id,
         doc, // DocumentSnapshot
         title,
         totalfortune,
-        monthfortune
+        monthfortune,
+        lang
       });
     });
     this.setState({
@@ -36,9 +43,17 @@ class App extends Component {
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
   }
 
+  checkLogin = () =>{
+    if (firebase.auth.currentUser !=null){
+      this.setState({
+        login:true
+      })
+    }
+  }
   render() {
     return (
       <div class="container">
+        {this.state.login ?
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">
@@ -54,6 +69,7 @@ class App extends Component {
                   {/* <th>totalfortune</th> */}
                   {/* <th>monthfortune</th> */}
                   <th>DOCID</th>
+                  <th>Language</th>
                 </tr>
               </thead>
               <tbody>
@@ -63,12 +79,14 @@ class App extends Component {
                     {/* <td>{renderHTML(board.totalfortune)}</td> */}
                     {/* <td>{renderHTML(board.monthfortune)}</td> */}
                     <td>{board.key}</td>
+                    <td>{board.lang}</td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
         </div>
+        : <Login login={this.checkLogin} /> }
       </div>
     );
   }

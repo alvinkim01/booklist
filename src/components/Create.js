@@ -9,12 +9,14 @@ class Create extends Component {
 
   constructor() {
     super();
-    this.ref = firebase.firestore().collection('boards');
+    const firestore = firebase.firestore;
+    this.ref = firestore.collection('boards');
     this.state = {
       title: '',
       totalfortune: '',
       monthfortune:'',
-      docid: ''
+      docid: '',
+      lang:''
     };
   }
   onChange = (e) => {
@@ -37,19 +39,21 @@ class Create extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    const { title, totalfortune,monthfortune, docid } = this.state;
+    const { title, totalfortune,monthfortune, docid,lang } = this.state;
 
     this.ref.doc(docid).set({
       title,
       totalfortune,
       monthfortune,
-      docid
+      docid,
+      lang
     }).then((docRef) => {
       this.setState({
         title: '',
         totalfortune: '',
         monthfortune,
-        docid
+        docid,
+        lang
       });
       this.props.history.push("/")
     })
@@ -59,7 +63,7 @@ class Create extends Component {
   }
 
   render() {
-    const { title, totalfortune,monthfortune, docid } = this.state;
+    const { title, totalfortune,monthfortune, docid,lang } = this.state;
     return (
       <div class="container">
         <div class="panel panel-default">
@@ -102,6 +106,10 @@ class Create extends Component {
               <div class="form-group">
                 <label for="docid">DOC ID:</label>
                 <input type="text" class="form-control" name="docid" value={docid} onChange={this.onChange} placeholder="docid" />
+              </div>
+              <div class="form-group">
+                <label for="lang">Language:</label>
+                <input type="text" class="form-control" name="lang" value={lang} onChange={this.onChange} placeholder="language" />
               </div>
               <button type="submit" class="btn btn-success">Submit</button>
             </form>
